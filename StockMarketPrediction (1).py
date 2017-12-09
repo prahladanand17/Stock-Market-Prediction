@@ -67,7 +67,7 @@ num_stocks = len(X)
 input_dimensionality = 3
 output_dimensionality = 1
 
-class Mul:
+class Multiply:
     def fwd(x, w):
         return np.dot(x, w)
     def back(dL, w, x):
@@ -97,7 +97,7 @@ class ReLu:
 
 
 #Build Model
-def forward(model, x):
+def forward_pass(model, x):
     
     W1, b1, W2, b2, = model['W1'], model['b1'], model['W2'], model['b2']
     
@@ -114,7 +114,7 @@ def forward(model, x):
 def cost_function(model):
     
     W1, b1, W2, b2 = model['W1'], model['b1'], model['W2'], model['b2']
-    result = forward(model, x)
+    result = forward_pass(model, x)
     loss = (result[range(num_stocks), y])
     total_loss = np.sum(loss)
     return total_loss / num_stocks
@@ -140,7 +140,7 @@ def build(hidden_layer_size, iterations = 10000, print_loss = False):
         
         wx1 = Mul.fwd(X, W1)
         z1 = Add.fwd(wx1, b1)
-        a1 = ReLu.fwd(z1)
+        a1, cache = ReLu.fwd(z1)
     
         wx2 = Mul.fwd(W2, a1)
         z2 = Add.fwd(wx2, b2)
